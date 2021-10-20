@@ -6,27 +6,33 @@ import (
 )
 
 func TestFixedXOR(t *testing.T) {
+	// the string `data` should produce the string `exp` when xor'd with the
+	// string `key`
 	data := "1c0111001f010100061a024b53535009181c"
-	d, err := hex.DecodeString(data)
-	if err != nil {
-		t.Fatal("failed to decode")
-	}
-
 	key := "686974207468652062756c6c277320657965"
-	k, err := hex.DecodeString(key)
-	if err != nil {
+	exp := "746865206b696420646f6e277420706c6179"
+
+	var err error
+	var db, kb []byte
+
+	if db, err = hex.DecodeString(data); err != nil {
+		t.Fatal("failed to decode")
+	}
+	if kb, err = hex.DecodeString(key); err != nil {
 		t.Fatal("failed to decode")
 	}
 
-	b := []byte{}
-	l := len(k)
-	for i := range d {
-		b = append(b, d[i]^k[i%l])
+	eb, l := []byte{}, len(kb)
+	for i := range db {
+		eb = append(eb, db[i]^kb[i%l])
 	}
 
-	exp := "746865206b696420646f6e277420706c6179"
-	act := hex.EncodeToString(b)
+	act := hex.EncodeToString(eb)
 	if exp != act {
 		t.Fatalf("expected %q but got %q", exp, act)
 	}
+	
+	t.Logf("db = %s", string(db))
+	t.Logf("kb = %s", string(kb))
+	t.Logf("eb = %s", string(eb))
 }
