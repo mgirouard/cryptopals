@@ -5,4 +5,5 @@ sources:
 - https://git.sr.ht/~mgirouard/cryptopals
 tasks:
 - test: |
+    cd cryptopals
     go test -v ./...
